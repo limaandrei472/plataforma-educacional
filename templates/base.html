@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manual do Burro</title>
+    <style>
+        body { margin: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f9f9f9; }
+        
+        /* CABEÇALHO */
+        header {
+            background-color: #2c3e50;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .header-left { display: flex; align-items: center; gap: 20px; }
+        .header-right { display: flex; align-items: center; gap: 20px; }
+
+        /* Botão Hamburguer */
+        .menu-btn {
+            font-size: 24px;
+            cursor: pointer;
+            background: none;
+            border: none;
+            color: white;
+            padding: 0;
+        }
+
+        .logo {
+            font-size: 22px;
+            font-weight: bold;
+            text-decoration: none;
+            color: white;
+        }
+
+        /* Botão Sair */
+        .logout-btn {
+            background-color: #e74c3c;
+            color: white;
+            padding: 8px 15px;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        .logout-btn:hover { background-color: #c0392b; }
+
+        /* Menu Lateral (Sidebar) */
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: #34495e;
+            overflow-x: hidden;
+            transition: 0.3s;
+            padding-top: 60px;
+            z-index: 1000;
+        }
+
+        .sidebar a {
+            padding: 15px 25px;
+            text-decoration: none;
+            font-size: 18px;
+            color: #bdc3c7;
+            display: block;
+            transition: 0.3s;
+            border-bottom: 1px solid #2c3e50;
+        }
+
+        .sidebar a:hover { color: #ecf0f1; background-color: #2c3e50; }
+
+        .close-btn {
+            position: absolute;
+            top: 0;
+            right: 25px;
+            font-size: 36px;
+            border: none;
+            background: none;
+            color: #bdc3c7;
+            cursor: pointer;
+        }
+        
+        /* Onde o conteúdo entra */
+        main { padding: 40px; max-width: 1000px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+    <div id="mySidebar" class="sidebar">
+        <button class="close-btn" onclick="fecharMenu()">&times;</button>
+        <h3 style="color: white; padding-left: 25px; margin-bottom: 20px;">📚 Matérias</h3>
+        
+        {% for materia in materias_globais %}
+            <a href="{% url 'materia_lista' materia.id %}">
+                {% if materia.icone %}{{ materia.icone }}{% endif %} 
+                {{ materia.nome }}
+            </a>
+        {% empty %}
+            <a href="#" style="font-size: 14px; padding-left: 25px;">Nenhuma matéria</a>
+        {% endfor %}
+    </div>
+
+    <header>
+        <div class="header-left">
+            <button class="menu-btn" onclick="abrirMenu()">&#9776;</button>
+            <a href="{% url 'home' %}" class="logo">🐴 Manual do Burro</a>
+        </div>
+        
+        <div class="header-right">
+            <a href="{% url 'logout' %}" class="logout-btn">Sair ➔</a>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <script>
+        function abrirMenu() { document.getElementById("mySidebar").style.width = "280px"; }
+        function fecharMenu() { document.getElementById("mySidebar").style.width = "0"; }
+    </script>
+
+</body>
+</html>

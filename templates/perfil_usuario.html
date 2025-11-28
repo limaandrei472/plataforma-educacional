@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div style="display: flex; gap: 40px; flex-wrap: wrap; align-items: start;">
+
+        <div style="flex: 1; min-width: 300px; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center;">
+            
+            <div style="font-size: 60px; margin-bottom: 20px;">
+                {% if usuario.tipo_usuario == 'PROFESSOR' %}🎓{% else %}👤{% endif %}
+            </div>
+
+            <h2 style="margin: 0; color: #2c3e50;">{{ usuario.nome }}</h2>
+            
+            <span style="background-color: #ecf0f1; color: #7f8c8d; padding: 5px 15px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-top: 10px; display: inline-block;">
+                {{ usuario.get_tipo_usuario_display }}
+            </span>
+
+            <p style="color: #555; margin-top: 20px;">{{ usuario.email }}</p>
+            <p style="color: #aaa; font-size: 13px;">Membro desde: {{ usuario.criado_em|date:"d/m/Y" }}</p>
+
+            {% if usuario.biografia %}
+                <hr style="margin: 20px 0; border: 0; border-top: 1px solid #eee;">
+                <h4 style="color: #333; text-align: left;">Sobre:</h4>
+                <p style="color: #666; text-align: justify; font-size: 14px; line-height: 1.5;">
+                    {{ usuario.biografia }}
+                </p>
+            {% endif %}
+        </div>
+
+
+        {% if aulas %}
+        <div style="flex: 2; min-width: 300px;">
+            <h2 style="color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; display: inline-block; margin-top: 0;">
+                📚 Aulas Publicadas
+            </h2>
+            <p style="color: #7f8c8d; margin-bottom: 20px;">Conteúdos criados por este professor.</p>
+
+            <div style="display: flex; flex-direction: column; gap: 15px;">
+                {% for aula in aulas %}
+                    <div style="background: white; padding: 20px; border-radius: 8px; border-left: 4px solid #3498db; box-shadow: 0 2px 5px rgba(0,0,0,0.05); display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <span style="font-size: 12px; font-weight: bold; color: #3498db; text-transform: uppercase;">
+                                {{ aula.materia.nome }}
+                            </span>
+                            <h3 style="margin: 5px 0 0 0; font-size: 18px;">
+                                <a href="{% url 'aula_detalhe' aula.id %}" style="text-decoration: none; color: #333;">
+                                    {{ aula.titulo }}
+                                </a>
+                            </h3>
+                            <small style="color: #999;">Postado em: {{ aula.criado_em|date:"d/m/Y" }}</small>
+                        </div>
+                        
+                        <a href="{% url 'aula_detalhe' aula.id %}" style="color: #3498db; font-size: 20px; text-decoration: none;">➔</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% else %}
+            {% if usuario.tipo_usuario == 'PROFESSOR' %}
+                <div style="flex: 2; padding: 20px; color: #777;">
+                    <h3>Este professor ainda não postou aulas.</h3>
+                </div>
+            {% endif %}
+        {% endif %}
+
+    </div>
+
+{% endblock %}

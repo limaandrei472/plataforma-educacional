@@ -9,11 +9,7 @@ class Usuario(models.Model):
     nome = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
     senha = models.CharField(max_length=100)
-    
-    # Campo opcional (pode ficar vazio)
     biografia = models.TextField(null=True, blank=True)
-    
-    # Campo obrigatório para o Admin não dar erro
     criado_em = models.DateTimeField(auto_now_add=True)
     
     tipo_usuario = models.CharField(
@@ -30,6 +26,8 @@ class Usuario(models.Model):
 
 class Materia(models.Model):
     nome = models.CharField(max_length=50)
+    # SUGESTÃO: Campo para guardar emojis (🧬, 📐, 📚)
+    icone = models.CharField(max_length=50, blank=True, null=True) 
 
     class Meta:
         ordering = ['nome']
@@ -40,14 +38,15 @@ class Materia(models.Model):
 class Assunto(models.Model):
     titulo = models.CharField(max_length=100)
     conteudo = models.TextField()
-    materia = models.ForeignKey(Materia, on_delete=models.CASCADE)
+    
+    # SUGESTÃO: related_name='assuntos' ajuda muito no HTML
+    materia = models.ForeignKey(Materia, on_delete=models.CASCADE, related_name='assuntos')
     autor = models.ForeignKey(Usuario, on_delete=models.CASCADE)
     
     criado_em = models.DateTimeField(auto_now_add=True)
     atualizado_em = models.DateTimeField(auto_now=True)
 
     class Meta:
-        # Ordena primeiro pelo ID da matéria, depois pelo título
         ordering = ['materia', 'titulo']
 
     def __str__(self):

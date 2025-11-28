@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div style="text-align: center; margin-bottom: 40px;">
+        <h1 style="color: #2c3e50;">👨‍🏫 Nossos Professores</h1>
+        <p style="color: #7f8c8d;">Conheça a equipe que descomplica o seu estudo.</p>
+    </div>
+
+    <div style="display: flex; gap: 20px; flex-wrap: wrap; justify-content: center;">
+
+        {% for professor in professores %}
+            <div style="background: white; width: 280px; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; border-top: 5px solid #f39c12; transition: transform 0.2s;">
+                
+                <div style="font-size: 50px; margin-bottom: 15px; background-color: #fdf2d0; width: 80px; height: 80px; line-height: 80px; border-radius: 50%; margin-left: auto; margin-right: auto;">
+                    🎓
+                </div>
+
+                <h3 style="margin: 10px 0; color: #333;">{{ professor.nome }}</h3>
+                
+                <p style="color: #777; font-size: 14px; height: 60px; overflow: hidden;">
+                    {% if professor.biografia %}
+                        {{ professor.biografia|truncatewords:15 }}
+                    {% else %}
+                        Professor parceiro do Manual do Burro.
+                    {% endif %}
+                </p>
+
+                <a href="{% url 'professor_perfil' professor.id %}" style="display: block; margin-top: 20px; background-color: #2c3e50; color: white; padding: 10px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+                    Informações
+                </a>
+            </div>
+        {% empty %}
+            <div style="text-align: center; color: #999;">
+                <h2>🕵️</h2>
+                <p>Nenhum professor encontrado.</p>
+            </div>
+        {% endfor %}
+
+    </div>
+
+{% endblock %}
